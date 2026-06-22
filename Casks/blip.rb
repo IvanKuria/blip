@@ -1,7 +1,7 @@
 cask "blip" do
   version "0.1.0"
 
-  sha256 "6c7b754c4f942d9e2fbf06234f3732ce987de9968bd22fb6f0ffd1c3fb35a12b"
+  sha256 "c71a8617e0a8181d2ade8a345fa2ada691575b9e72b059e9ae9f8806a85f283b"
 
   url "https://github.com/IvanKuria/blip/releases/download/v#{version}/Blip-#{version}.dmg"
   name "Blip"

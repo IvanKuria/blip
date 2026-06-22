@@ -192,30 +192,42 @@ step "Creating DMG"
 STAGING_DIR="$(mktemp -d "${TMPDIR:-/tmp}/blip-dmg.XXXXXX")"
 trap 'rm -rf "${STAGING_DIR}"' EXIT
 
-# Stage the app and an /Applications symlink so users can drag-to-install.
+# Stage the app for drag-to-install.
 cp -R "${APP_PATH}" "${STAGING_DIR}/"
-ln -s /Applications "${STAGING_DIR}/Applications"
 
-if command -v create-dmg >/dev/null 2>&1; then
-  info "Using create-dmg."
-  # create-dmg refuses to overwrite; we already removed ${DMG_PATH} above.
-  create-dmg \
-    --volname "${PRODUCT_NAME} ${VERSION}" \
-    --app-drop-link 480 170 \
-    --icon "${PRODUCT_NAME}.app" 160 170 \
-    --window-size 640 360 \
-    "${DMG_PATH}" \
-    "${STAGING_DIR}" \
-    || fail "create-dmg failed."
-else
-  info "create-dmg not found; falling back to hdiutil."
+make_dmg_hdiutil() {
+  # hdiutil needs the Applications symlink staged ourselves.
+  ln -sf /Applications "${STAGING_DIR}/Applications"
   hdiutil create \
     -volname "${PRODUCT_NAME} ${VERSION}" \
     -srcfolder "${STAGING_DIR}" \
     -ov \
     -format UDZO \
-    "${DMG_PATH}" \
-    || fail "hdiutil create failed."
+    "${DMG_PATH}"
+}
+
+if command -v create-dmg >/dev/null 2>&1; then
+  info "Using create-dmg."
+  # Detach any stale dmg volumes from a prior interrupted run (they cause an
+  # "Applications: File exists" collision).
+  for v in /Volumes/dmg.*; do
+    [[ -e "$v" ]] && hdiutil detach "$v" -force >/dev/null 2>&1 || true
+  done
+  # NOTE: create-dmg adds its own /Applications drop link, so do NOT pre-create one.
+  if ! create-dmg \
+      --volname "${PRODUCT_NAME} ${VERSION}" \
+      --app-drop-link 480 170 \
+      --icon "${PRODUCT_NAME}.app" 160 170 \
+      --window-size 640 360 \
+      "${DMG_PATH}" \
+      "${STAGING_DIR}"; then
+    info "create-dmg failed; falling back to hdiutil."
+    rm -f "${DMG_PATH}" "${BUILD_DIR}"/rw.*.dmg
+    make_dmg_hdiutil || fail "hdiutil create failed."
+  fi
+else
+  info "create-dmg not found; using hdiutil."
+  make_dmg_hdiutil || fail "hdiutil create failed."
 fi
 
 [[ -f "${DMG_PATH}" ]] || fail "DMG was not produced: ${DMG_PATH}"
