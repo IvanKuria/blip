@@ -74,17 +74,27 @@ struct BlipView: View {
 
     @ViewBuilder
     private func chip(for content: CopyContent) -> some View {
-        switch content {
-        case .color(let hex):
-            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                .fill(Color(hexString: hex))
-                .frame(width: 26, height: 26)
-                .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.white.opacity(0.18)))
-        case .image: chipGlyph("photo")
-        case .files: chipGlyph("doc.on.doc.fill")
-        case .link: chipGlyph("link")
-        case .concealed: chipGlyph("lock.fill")
-        case .text: chipGlyph("textformat")
+        if let thumb = model.thumbnail {
+            Image(nsImage: thumb)
+                .resizable()
+                .interpolation(.high)
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 30, height: 30)
+                .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 7).strokeBorder(.white.opacity(0.15)))
+        } else {
+            switch content {
+            case .color(let hex):
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(Color(hexString: hex))
+                    .frame(width: 26, height: 26)
+                    .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.white.opacity(0.18)))
+            case .image: chipGlyph("photo")
+            case .files: chipGlyph("doc.on.doc.fill")
+            case .link: chipGlyph("link")
+            case .concealed: chipGlyph("lock.fill")
+            case .text: chipGlyph("textformat")
+            }
         }
     }
 
@@ -104,6 +114,14 @@ struct BlipView: View {
     }
 
     private func subtitle(for content: CopyContent) -> String {
+        let detail = detailText(for: content)
+        if let app = model.sourceApp, !app.isEmpty {
+            return "\(app) · \(detail)"
+        }
+        return detail
+    }
+
+    private func detailText(for content: CopyContent) -> String {
         switch content {
         case .text(let characters, let preview):
             if model.showPreview, !preview.isEmpty { return preview }

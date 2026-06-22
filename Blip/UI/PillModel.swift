@@ -1,4 +1,4 @@
-import Foundation
+import AppKit
 import Observation
 import BlipKit
 
@@ -15,4 +15,8 @@ final class PillModel {
     /// Height of the physical notch (0 on displays without one).
     var notchHeight: CGFloat = 0
     var hasNotch: Bool { notchHeight > 0 }
+    /// A real preview (copied image, or a file's QuickLook/icon), when available.
+    var thumbnail: NSImage?
+    /// The app the copy came from (e.g. "Safari").
+    var sourceApp: String?
 }
