@@ -31,7 +31,7 @@ It is **not** a clipboard manager. No history, no list, no database. Just a mome
 Blip reads what you copied and shows the right thing:
 
 <p align="center">
-  <img src="assets/gallery.png" alt="Text, color, and image confirmations" width="640">
+  <img src="assets/text.png" alt="A text copy confirmation in the notch" width="760">
 </p>
 
 - **Text** → a live preview, with word + character count
@@ -42,6 +42,14 @@ Blip reads what you copied and shows the right thing:
 - **A password** (from your password manager) → just `hidden` — never the value
 
 Plus the little things: the app you copied **from**, a **×N** streak when you copy rapidly, and — on **hover** — contextual quick actions (*Open link*, *Reveal in Finder*, *Save image*, *Paste as plain text*, *Copy RGB / HSL*). Click the pill to run the obvious one.
+
+## Settings
+
+Minimal and native — launch at login, on-screen duration, an optional sound, and a text-preview toggle.
+
+<p align="center">
+  <img src="assets/settings.png" alt="Blip settings" width="560">
+</p>
 
 ## Private by design
 
