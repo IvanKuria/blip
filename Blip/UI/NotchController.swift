@@ -22,7 +22,11 @@ final class NotchController {
         model.showPreview = defaults.object(forKey: "showPreview") as? Bool ?? true
         let duration = defaults.object(forKey: "duration") as? Double ?? 1.2
 
-        positionPanel()
+        let screen = NotchGeometry.notchScreen()
+        model.notchHeight = screen.safeAreaInsets.top
+        model.minWidth = max(NotchGeometry.notchWidth(screen), 200)
+        panel.setFrame(NotchGeometry.panelFrame(on: screen, size: Theme.panelSize), display: false)
+
         model.content = event.content
         panel.orderFrontRegardless()
         model.isVisible = true
@@ -47,8 +51,4 @@ final class NotchController {
         }
     }
 
-    private func positionPanel() {
-        let screen = NotchGeometry.activeScreen()
-        panel.setFrame(NotchGeometry.panelFrame(on: screen, size: Theme.panelSize), display: false)
-    }
 }

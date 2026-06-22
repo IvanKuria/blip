@@ -11,7 +11,7 @@ final class NotchPanel: NSPanel {
             defer: false
         )
         isFloatingPanel = true
-        level = .statusBar
+        level = .statusBar + 8  // sit above other status items and fullscreen windows
         collectionBehavior = [.canJoinAllSpaces, .stationary, .fullScreenAuxiliary, .ignoresCycle]
         isOpaque = false
         backgroundColor = .clear
