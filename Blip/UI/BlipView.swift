@@ -61,7 +61,15 @@ struct BlipView: View {
         .padding(.top, (model.hasNotch ? model.notchHeight : 6) + 12)
         .padding(.bottom, 18)
         .frame(minWidth: max(model.minWidth, 300))
-        .background { background.shadow(color: .black.opacity(0.3), radius: 9, y: 5) }
+        // No shadow on the notch extension (a halo makes it read gray and floaty);
+        // a soft shadow only for the detached soft-pill on non-notch displays.
+        .background {
+            if model.hasNotch {
+                background
+            } else {
+                background.shadow(color: .black.opacity(0.3), radius: 9, y: 5)
+            }
+        }
         .padding(.top, model.hasNotch ? 0 : 8)
     }
 
@@ -149,10 +157,9 @@ struct BlipView: View {
 
     private func chipGlyph(_ name: String) -> some View {
         Image(systemName: name)
-            .font(.system(size: 19, weight: .medium))
-            .foregroundStyle(.white.opacity(0.7))
+            .font(.system(size: 22, weight: .medium))
+            .foregroundStyle(.white.opacity(0.85))
             .frame(width: 40, height: 40)
-            .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(.white.opacity(0.10)))
     }
 
     private func glyphName(for content: CopyContent) -> String {
