@@ -33,10 +33,10 @@ struct BlipView: View {
             contentBody(for: content)
             if model.isHovered, !model.actions.isEmpty { actionRow }
         }
-        .padding(.horizontal, 24)
-        .padding(.top, (model.hasNotch ? model.notchHeight : 6) + 12)
-        .padding(.bottom, 18)
-        .frame(minWidth: max(model.minWidth, 300))
+        .padding(.horizontal, 20)
+        .padding(.top, (model.hasNotch ? model.notchHeight : 6) + 8)
+        .padding(.bottom, 14)
+        .frame(minWidth: max(model.minWidth, 230))
         // Content fades + lifts (applied before the background so only the
         // content fades, not the black).
         .opacity(model.isVisible ? 1 : 0)
@@ -75,12 +75,12 @@ struct BlipView: View {
     }
 
     private func singleRow(_ content: CopyContent) -> some View {
-        HStack(spacing: 15) {
+        HStack(spacing: 12) {
             checkmark
             chip(for: content)
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(title(for: content))
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.white)
                 subtitle(for: content)
             }
@@ -94,14 +94,14 @@ struct BlipView: View {
         return VStack(alignment: .leading, spacing: 13) {
             HStack(spacing: 15) {
                 checkmark
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Copied").font(.system(size: 17, weight: .semibold)).foregroundStyle(.white)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Copied").font(.system(size: 15, weight: .semibold)).foregroundStyle(.white)
                     HStack(spacing: 6) {
                         if let icon = model.sourceAppIcon {
-                            Image(nsImage: icon).resizable().frame(width: 16, height: 16)
+                            Image(nsImage: icon).resizable().frame(width: 20, height: 20)
                         }
                         Text("\(total) item\(total == 1 ? "" : "s")")
-                            .font(.system(size: 13).monospacedDigit())
+                            .font(.system(size: 12).monospacedDigit())
                             .foregroundStyle(.white.opacity(0.62))
                     }
                 }
@@ -144,7 +144,7 @@ struct BlipView: View {
 
     private var checkmark: some View {
         Image(systemName: "checkmark.circle.fill")
-            .font(.system(size: 27, weight: .semibold))
+            .font(.system(size: 21, weight: .semibold))
             .foregroundStyle(.white, Theme.check)
     }
 
@@ -198,10 +198,10 @@ struct BlipView: View {
         } else if let thumb = model.thumbnails.first {
             thumbnailView(thumb)
         } else if case let .color(hex) = content {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+            RoundedRectangle(cornerRadius: 9, style: .continuous)
                 .fill(Color(hexString: hex))
-                .frame(width: 44, height: 44)
-                .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.white.opacity(0.2)))
+                .frame(width: 38, height: 38)
+                .overlay(RoundedRectangle(cornerRadius: 9).strokeBorder(.white.opacity(0.2)))
         } else {
             chipGlyph(glyphName(for: content))
         }
@@ -210,9 +210,9 @@ struct BlipView: View {
     private func thumbnailView(_ image: NSImage) -> some View {
         Image(nsImage: image)
             .resizable().interpolation(.high).aspectRatio(contentMode: .fill)
-            .frame(width: 44, height: 44)
-            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.white.opacity(0.15)))
+            .frame(width: 38, height: 38)
+            .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 9).strokeBorder(.white.opacity(0.15)))
     }
 
     private var stackedThumbnails: some View {
@@ -232,9 +232,9 @@ struct BlipView: View {
 
     private func chipGlyph(_ name: String) -> some View {
         Image(systemName: name)
-            .font(.system(size: 22, weight: .medium))
+            .font(.system(size: 19, weight: .medium))
             .foregroundStyle(.white.opacity(0.85))
-            .frame(width: 40, height: 40)
+            .frame(width: 34, height: 34)
     }
 
     private func glyphName(for content: CopyContent) -> String {
@@ -258,10 +258,10 @@ struct BlipView: View {
     private func subtitle(for content: CopyContent) -> some View {
         HStack(spacing: 6) {
             if let icon = model.sourceAppIcon, !isColor(content) {
-                Image(nsImage: icon).resizable().frame(width: 16, height: 16)
+                Image(nsImage: icon).resizable().frame(width: 20, height: 20)
             }
             Text(detailText(for: content))
-                .font(.system(size: 13).monospacedDigit())
+                .font(.system(size: 12).monospacedDigit())
                 .foregroundStyle(.white.opacity(0.62))
                 .lineLimit(1)
         }
