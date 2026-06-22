@@ -185,9 +185,9 @@ struct BlipView: View {
     @ViewBuilder
     private var background: some View {
         if model.hasNotch {
-            NotchBackground(radius: 22)
+            NotchBackground(radius: 32)
         } else {
-            RoundedRectangle(cornerRadius: 24, style: .continuous).fill(.black)
+            RoundedRectangle(cornerRadius: 32, style: .continuous).fill(.black)
         }
     }
 

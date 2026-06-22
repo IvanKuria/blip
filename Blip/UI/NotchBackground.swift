@@ -4,8 +4,8 @@ import SwiftUI
 /// *concave* fillets at the top-left/right so it flows out of the menu bar like
 /// the real notch. (Technique adapted from Lakr233/NotchDrop, MIT.)
 struct NotchBackground: View {
-    var radius: CGFloat = 13
-    private let spacing: CGFloat = 8
+    var radius: CGFloat = 32       // matches NotchDrop's opened corner radius
+    private let spacing: CGFloat = 16
 
     var body: some View {
         Rectangle()
