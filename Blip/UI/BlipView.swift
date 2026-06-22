@@ -38,10 +38,12 @@ struct BlipView: View {
         .padding(.bottom, 14)
         .frame(minWidth: max(model.minWidth, 230))
         // Content fades + lifts (applied before the background so only the
-        // content fades, not the black).
+        // content fades, not the black). A quicker curve than the spring so the
+        // check/text clear *with* the notch collapse instead of lingering after.
         .opacity(model.isVisible ? 1 : 0)
-        .scaleEffect(model.isVisible ? 1 : 0.97, anchor: .top)
-        .offset(y: model.isVisible ? 0 : -6)
+        .scaleEffect(model.isVisible ? 1 : 0.92, anchor: .top)
+        .offset(y: model.isVisible ? 0 : -8)
+        .animation(reduceMotion ? .easeInOut(duration: 0.15) : .easeOut(duration: 0.17), value: model.isVisible)
         // The black notch shape widens out of the notch and collapses back into
         // it — scaling AND fading symmetrically so there's no opaque pop on exit.
         // Bled 2px above the top edge so there's never a seam at the menu bar.
