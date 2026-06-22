@@ -42,11 +42,13 @@ struct BlipView: View {
         .opacity(model.isVisible ? 1 : 0)
         .scaleEffect(model.isVisible ? 1 : 0.97, anchor: .top)
         .offset(y: model.isVisible ? 0 : -6)
-        // The black notch shape widens out of the notch, bled 2px above the top
-        // edge so there's never a seam line against the menu bar.
+        // The black notch shape widens out of the notch and collapses back into
+        // it — scaling AND fading symmetrically so there's no opaque pop on exit.
+        // Bled 2px above the top edge so there's never a seam at the menu bar.
         .background {
             backgroundLayer
-                .scaleEffect(x: model.isVisible ? 1 : 0.5, y: model.isVisible ? 1 : 0.45, anchor: .top)
+                .scaleEffect(x: model.isVisible ? 1 : 0.42, y: model.isVisible ? 1 : 0.32, anchor: .top)
+                .opacity(model.isVisible ? 1 : 0)
                 .padding(.top, model.hasNotch ? -2 : 0)
         }
         .padding(.top, model.hasNotch ? 0 : 8)

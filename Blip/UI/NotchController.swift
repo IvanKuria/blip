@@ -82,7 +82,9 @@ final class NotchController {
 
     private func retract() {
         model.isVisible = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) { [weak self] in
+        // Wait for the collapse-and-fade to finish before removing the panel,
+        // so the exit never gets cut short into a pop.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
             guard let self, self.model.isVisible == false else { return }
             self.panel.orderOut(nil)
             self.model.content = nil
