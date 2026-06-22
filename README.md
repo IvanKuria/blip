@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/hero.png" alt="Blip showing a copied file tray in the notch" width="820">
+  <img src="assets/icon.png" alt="Blip app icon" width="128">
 </p>
 
 <h1 align="center">Blip</h1>
@@ -19,6 +19,10 @@
 </p>
 
 ---
+
+<p align="center">
+  <img src="assets/hero.png" alt="Blip showing a copied file tray in the notch" width="820">
+</p>
 
 ## Why
 
