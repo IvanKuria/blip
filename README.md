@@ -9,26 +9,47 @@
 
 ---
 
-> 🚧 Early development.
-
 ## Why
 
-You press Cmd+C and macOS shows you… nothing. So you re-copy "just in case." **Blip** gives that moment a beautiful, content-aware confirmation right in the notch (a soft pill on non-notch Macs): copy text → "Copied · 142 characters"; copy a color → a swatch + hex; copy an image → a thumbnail; copy a file → its icon and name.
+You press Cmd+C and macOS shows you… nothing. So you re-copy "just in case." **Blip** gives that moment a beautiful, content-aware confirmation right in the notch (a soft pill on non-notch Macs):
 
-It is **not** a clipboard manager — no history, no list. Just a momentary, delightful "got it."
+- **Text** → "Copied" + a preview (or character count)
+- **A color** (`#3DD4FF`) → a swatch + the hex
+- **An image** → dimensions + size
+- **File(s)** → name (or "N items")
+- **A link** → "Copied link" + the domain
+- **A password** (from your password manager) → "Copied · hidden" — never the value
+
+It is **not** a clipboard manager — no history, no list. Just a momentary, delightful "got it," then it retracts.
 
 ## Private by design
 
-- 100% local. **No network, ever.** No clipboard history or storage.
-- Respects the `org.nspasteboard.ConcealedType` flag, so a password-manager copy shows "Copied · hidden" — never the value.
+- **100% local. No network, ever.** (There's intentionally no network entitlement.)
+- **No clipboard history or storage** — each copy is shown and discarded.
+- Honors the `org.nspasteboard.ConcealedType` flag, so password-manager copies show "hidden."
 
-## Building from source
+## Settings
 
+Launch at login, on-screen duration, optional sound, text-preview toggle — all in a small native window (⌘,).
+
+## Install
+
+**Homebrew** (after first release):
+```bash
+brew install --cask IvanKuria/blip/blip   # tap + cask
+```
+
+**Or build from source:**
 ```bash
 brew install xcodegen
 xcodegen generate
-open Blip.xcodeproj
+open Blip.xcodeproj   # ⌘R
 ```
+
+## How it's built
+
+- `BlipKit` — a pure, unit-tested Swift package (pasteboard abstraction, content classifier, change watcher). No UI, no network. 15 tests.
+- `Blip` — a thin SwiftUI/AppKit menu-bar app rendering the notch pill (`NSPanel`, system materials, SF Pro, SF Symbols, springs, Reduce-Motion aware).
 
 ## License
 
