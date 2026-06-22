@@ -19,7 +19,7 @@ public enum ClipboardClassifier {
             return .files(names: names, count: names.count)
         }
 
-        // Image (dimensions via ImageIO — no AppKit needed).
+        // Image (dimensions via ImageIO - no AppKit needed).
         for imageType in [PBType.png, PBType.tiff] where types.contains(imageType) {
             if let data = pasteboard.data(forType: imageType), let size = pixelSize(of: data) {
                 return .image(pixelWidth: size.0, pixelHeight: size.1, byteCount: data.count)

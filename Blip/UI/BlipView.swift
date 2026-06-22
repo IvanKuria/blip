@@ -2,10 +2,10 @@ import SwiftUI
 import AppKit
 import BlipKit
 
-/// The pill — drawn as the notch extending downward (flush top + concave
+/// The pill - drawn as the notch extending downward (flush top + concave
 /// fillets + rounded bottom). Shows a green check, a content-aware preview
 /// (thumbnail / stacked file thumbnails / color swatch), source app, a combo
-/// streak, and — on hover — contextual quick actions.
+/// streak, and - on hover - contextual quick actions.
 struct BlipView: View {
     @Bindable var model: PillModel
     var onHoverChange: (Bool) -> Void
@@ -45,7 +45,7 @@ struct BlipView: View {
         .offset(y: model.isVisible ? 0 : -8)
         .animation(reduceMotion ? .easeInOut(duration: 0.15) : .easeOut(duration: 0.17), value: model.isVisible)
         // The black notch shape widens out of the notch and collapses back into
-        // it — scaling AND fading symmetrically so there's no opaque pop on exit.
+        // it - scaling AND fading symmetrically so there's no opaque pop on exit.
         // Bled 2px above the top edge so there's never a seam at the menu bar.
         .background {
             backgroundLayer

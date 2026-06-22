@@ -4,7 +4,7 @@
 
 **Goal:** Ship a tiny, Apple-grade macOS menu-bar app that confirms every Cmd+C in the notch, content-aware (text/color/image/files/link/concealed), local-only.
 
-**Architecture:** A pure, unit-tested `BlipKit` SPM package (pasteboard abstraction, content classifier, change watcher — no UI, no network) consumed by a thin `Blip` AppKit/SwiftUI menu-bar app that renders a notch-anchored pill with native materials, SF Pro, SF Symbols, and system springs.
+**Architecture:** A pure, unit-tested `BlipKit` SPM package (pasteboard abstraction, content classifier, change watcher - no UI, no network) consumed by a thin `Blip` AppKit/SwiftUI menu-bar app that renders a notch-anchored pill with native materials, SF Pro, SF Symbols, and system springs.
 
 **Tech Stack:** Swift 6 / Xcode 26, SwiftUI + AppKit, XcodeGen, ImageIO (image dimensions), SMAppService (login item). No third-party deps. No network.
 
@@ -13,7 +13,7 @@
 - **Platform:** macOS 14+ deployment target; native Swift only.
 - **Name/bundle:** app name **Blip**, bundle id `com.ivankuria.blip`.
 - **Privacy:** local-only; NO network anywhere; NO clipboard history/persistence; honor `org.nspasteboard.ConcealedType` (show "hidden"); ignore `org.nspasteboard.TransientType`.
-- **Design bar:** Apple-grade — SF Pro, tabular figures, SF Symbols, `NSVisualEffectView` materials, semantic system colors, system spring animation, light/dark adaptive, honor Reduce Motion + Reduce Transparency.
+- **Design bar:** Apple-grade - SF Pro, tabular figures, SF Symbols, `NSVisualEffectView` materials, semantic system colors, system spring animation, light/dark adaptive, honor Reduce Motion + Reduce Transparency.
 - **Two-target split:** all testable logic in `BlipKit` (Foundation/ImageIO only, no AppKit UI); macOS glue in `Blip`.
 - **Signing:** dev = ad-hoc ("sign to run locally"); release = Developer ID "Ivan Kuria" (team 347LA37C2B) + notarization (M3).
 - **Repo:** local git in `~/Documents/Blip`; GitHub remote optional.
@@ -56,7 +56,7 @@ Blip/
 
 ---
 
-# Milestone 1 — BlipKit core (fully testable)
+# Milestone 1 - BlipKit core (fully testable)
 
 ### Task 1: Scaffold, git, build-green
 
@@ -64,9 +64,9 @@ Blip/
 
 **Interfaces:** Produces a buildable empty menu-bar app + importable `BlipKit`.
 
-- [ ] **Step 1:** `Package.swift` — library `BlipKit`, platform `.macOS(.v14)`, swift-tools 6.0, a target + test target (no external deps).
-- [ ] **Step 2:** `project.yml` — app target `Blip`, macOS 14, `INFOPLIST_KEY_LSUIElement: YES`, local package dep on `Packages/BlipKit`, `GENERATE_INFOPLIST_FILE: YES`, bundle id `com.ivankuria.blip`, `CODE_SIGN_STYLE: Manual`, `CODE_SIGN_IDENTITY: "-"`, entitlements path, `ENABLE_HARDENED_RUNTIME: YES`, `SWIFT_VERSION: 6.0`.
-- [ ] **Step 3:** `BlipApp.swift` — `@main struct BlipApp: App { var body: some Scene { MenuBarExtra("Blip", systemImage: "checkmark.circle") { Button("Quit") { NSApp.terminate(nil) } } } }`. Entitlements: `com.apple.security.app-sandbox = true` only (no network).
+- [ ] **Step 1:** `Package.swift` - library `BlipKit`, platform `.macOS(.v14)`, swift-tools 6.0, a target + test target (no external deps).
+- [ ] **Step 2:** `project.yml` - app target `Blip`, macOS 14, `INFOPLIST_KEY_LSUIElement: YES`, local package dep on `Packages/BlipKit`, `GENERATE_INFOPLIST_FILE: YES`, bundle id `com.ivankuria.blip`, `CODE_SIGN_STYLE: Manual`, `CODE_SIGN_IDENTITY: "-"`, entitlements path, `ENABLE_HARDENED_RUNTIME: YES`, `SWIFT_VERSION: 6.0`.
+- [ ] **Step 3:** `BlipApp.swift` - `@main struct BlipApp: App { var body: some Scene { MenuBarExtra("Blip", systemImage: "checkmark.circle") { Button("Quit") { NSApp.terminate(nil) } } } }`. Entitlements: `com.apple.security.app-sandbox = true` only (no network).
 - [ ] **Step 4:** `.gitignore` (`.build/`, `*.xcodeproj`, `DerivedData/`, `.DS_Store`, `*.dmg`), MIT LICENSE, README stub. `BlipKit.swift`: `public enum BlipKit { public static let version = "0.1.0" }`. `SmokeTests.swift`: assert version non-empty.
 - [ ] **Step 5:** Run `xcodegen generate` then `swift test` in `Packages/BlipKit` (PASS) and `xcodebuild -scheme Blip -destination 'platform=macOS' build` (BUILD SUCCEEDED).
 - [ ] **Step 6 (commit):**
@@ -130,11 +130,11 @@ git add -A && git commit -m "chore: scaffold Blip menu-bar app + BlipKit package
 - [ ] **Step 2:** run → FAIL.
 - [ ] **Step 3:** implement watcher (store `lastChangeCount`, init to pasteboard's current so the first real change triggers; guard unchanged).
 - [ ] **Step 4:** run → PASS.
-- [ ] **Step 5: commit** `feat(blipkit): clipboard change watcher`. **M1 done — run full `swift test` (all green).**
+- [ ] **Step 5: commit** `feat(blipkit): clipboard change watcher`. **M1 done - run full `swift test` (all green).**
 
 ---
 
-# Milestone 2 — App UI (Apple-grade, run-verified)
+# Milestone 2 - App UI (Apple-grade, run-verified)
 
 > Verified by building + launching and observing. Each ends in a commit.
 
@@ -146,8 +146,8 @@ git add -A && git commit -m "chore: scaffold Blip menu-bar app + BlipKit package
 
 ### Task 6: NotchGeometry + NotchPanel
 **Files:** Create `UI/NotchGeometry.swift`, `UI/NotchPanel.swift`.
-- `NotchGeometry.pillFrame(on: NSScreen, expandedSize:) -> NSRect` — if the screen has a notch (`safeAreaInsets.top > 0` / `auxiliaryTopLeftArea`), center on the notch; else top-center of the screen, just under the menu bar.
-- `NotchPanel: NSPanel` — borderless, `.nonactivatingPanel`, `level = .statusBar`, `collectionBehavior = [.canJoinAllSpaces, .stationary, .fullScreenAuxiliary]`, `isOpaque=false`, clear background, `ignoresMouseEvents=true`, `hasShadow=false`. Hosts an `NSHostingView`.
+- `NotchGeometry.pillFrame(on: NSScreen, expandedSize:) -> NSRect` - if the screen has a notch (`safeAreaInsets.top > 0` / `auxiliaryTopLeftArea`), center on the notch; else top-center of the screen, just under the menu bar.
+- `NotchPanel: NSPanel` - borderless, `.nonactivatingPanel`, `level = .statusBar`, `collectionBehavior = [.canJoinAllSpaces, .stationary, .fullScreenAuxiliary]`, `isOpaque=false`, clear background, `ignoresMouseEvents=true`, `hasShadow=false`. Hosts an `NSHostingView`.
 - **Verify:** a temporary call shows an empty pill at the notch on the built-in display and top-center on an external display. Commit.
 
 ### Task 7: Theme + BlipView (content-adaptive pill)
@@ -174,7 +174,7 @@ git add -A && git commit -m "chore: scaffold Blip menu-bar app + BlipKit package
 
 ---
 
-# Milestone 3 — Icon, README, packaging
+# Milestone 3 - Icon, README, packaging
 
 ### Task 11: App icon
 **Files:** `Blip/Resources/Assets.xcassets/AppIcon.appiconset` + `scripts/make-icon.sh`.
@@ -196,5 +196,5 @@ git add -A && git commit -m "chore: scaffold Blip menu-bar app + BlipKit package
 ## Self-Review (done)
 
 - **Spec coverage:** classifier across all content types (T3), watcher w/ concealed+transient (T4), notch pill + geometry/fallback (T6–T8), Apple-grade design + Reduce-Motion/Transparency + light/dark (T7,T10), settings + login item + privacy (T9), local-only/no-network (entitlements T1, no net code anywhere), icon/README/notarized DMG/Homebrew (T11–T13). ✓
-- **Placeholders:** none — core tasks have concrete tests + interfaces; UI tasks specify files + manual verification (appropriate). ✓
+- **Placeholders:** none - core tasks have concrete tests + interfaces; UI tasks specify files + manual verification (appropriate). ✓
 - **Type consistency:** `PasteboardReading`, `CopyContent`, `CopyEvent`, `ClipboardClassifier.classify`, `ClipboardWatcher`, `PBType` used consistently across tasks. ✓

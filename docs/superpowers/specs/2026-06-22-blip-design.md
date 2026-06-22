@@ -1,6 +1,6 @@
-# Blip — Design Spec
+# Blip - Design Spec
 
-> A tiny, Apple-grade macOS app that gives **Cmd+C a moment**: copy anything and the notch briefly expands to confirm *what* you grabbed — then retracts. The acknowledgement macOS never gave you.
+> A tiny, Apple-grade macOS app that gives **Cmd+C a moment**: copy anything and the notch briefly expands to confirm *what* you grabbed - then retracts. The acknowledgement macOS never gave you.
 
 - **Status:** Design (pre-implementation)
 - **Date:** 2026-06-22
@@ -12,13 +12,13 @@
 
 ## Context
 
-Copying on macOS gives **zero feedback** — you press Cmd+C and nothing happens visibly, so people re-copy "just in case." Blip fixes that overlooked, million-times-a-day moment in the spirit of *boring.notch*: it turns a wasted interaction into a small, delightful, useful confirmation anchored in the notch (a "soft pill" on non-notch displays).
+Copying on macOS gives **zero feedback** - you press Cmd+C and nothing happens visibly, so people re-copy "just in case." Blip fixes that overlooked, million-times-a-day moment in the spirit of *boring.notch*: it turns a wasted interaction into a small, delightful, useful confirmation anchored in the notch (a "soft pill" on non-notch displays).
 
 It is **not** a clipboard manager (no history, no list). It is a momentary, content-aware acknowledgement. Verified-open: the only thing close is an off-by-default toast buried inside one clipboard manager; no dedicated app owns this.
 
-**Intended outcome:** a free, beautifully native app with an instantly-demoable hook ("your Mac never told you Cmd+C worked — now it does"), architected so sibling "notch moments" (device-connect, charging) can be added later as an optional suite.
+**Intended outcome:** a free, beautifully native app with an instantly-demoable hook ("your Mac never told you Cmd+C worked - now it does"), architected so sibling "notch moments" (device-connect, charging) can be added later as an optional suite.
 
-**Design bar:** must look and feel as if Apple made it — SF Pro, SF Symbols, system materials/vibrancy, semantic colors, light/dark adaptive, spring animation that matches the system, Retina-crisp, Reduce-Motion aware.
+**Design bar:** must look and feel as if Apple made it - SF Pro, SF Symbols, system materials/vibrancy, semantic colors, light/dark adaptive, spring animation that matches the system, Retina-crisp, Reduce-Motion aware.
 
 ---
 
@@ -40,7 +40,7 @@ It is **not** a clipboard manager (no history, no list). It is a momentary, cont
 
 ## Users & the hook
 
-- **Primary user:** any Mac user (writers, designers, developers, students) — copying is universal.
+- **Primary user:** any Mac user (writers, designers, developers, students) - copying is universal.
 - **The shareable moment:** copy a color → a swatch + hex blips in the notch; copy an image → a thumbnail; copy 142 characters → "Copied · 142 characters." That 5-second clip is the video.
 
 ---
@@ -67,16 +67,16 @@ It is **not** a clipboard manager (no history, no list). It is a momentary, cont
 | Image | "Copied" | "image · W×H · size" + **thumbnail** |
 | File(s) | "Copied" | file name (or "N items") + **`NSWorkspace` icon** |
 | URL/link | "Copied link" | domain + link glyph |
-| Concealed (password) | "Copied" | "hidden" — **never** the value |
+| Concealed (password) | "Copied" | "hidden" - **never** the value |
 
 ### Settings (one small, native window)
 - Launch at login (`SMAppService`).
 - Enable/disable; display duration; position (Auto / Notch / Top-center); sound on/off; show-preview on/off.
-- Privacy note shown inline. That's it — Apple-minimal.
+- Privacy note shown inline. That's it - Apple-minimal.
 
 ---
 
-## Design language (Apple-grade — first-class requirement)
+## Design language (Apple-grade - first-class requirement)
 
 - **Material:** `NSVisualEffectView` HUD/popover material; the notch body is true black to blend with the physical notch; vibrancy for text/glyphs.
 - **Typography:** SF Pro; **tabular figures** for counts; title `.headline`, subtitle `.caption` in `secondaryLabelColor`.
@@ -91,22 +91,22 @@ It is **not** a clipboard manager (no history, no list). It is a momentary, cont
 
 Mirror the clean split used before: a pure, testable core package + a thin app target.
 
-### `BlipKit` (pure Swift, no UI — unit-tested with fakes)
-- `protocol PasteboardReading` — abstracts `NSPasteboard` (changeCount + typed reads) for testing.
-- `ClipboardWatcher` — polls `changeCount` (~0.25s) via an injected clock + `PasteboardReading`; emits a `CopyEvent` only on real change; **drops transient/concealed appropriately**.
-- `ClipboardClassifier` — pure function: pasteboard contents → `CopyContent` enum
+### `BlipKit` (pure Swift, no UI - unit-tested with fakes)
+- `protocol PasteboardReading` - abstracts `NSPasteboard` (changeCount + typed reads) for testing.
+- `ClipboardWatcher` - polls `changeCount` (~0.25s) via an injected clock + `PasteboardReading`; emits a `CopyEvent` only on real change; **drops transient/concealed appropriately**.
+- `ClipboardClassifier` - pure function: pasteboard contents → `CopyContent` enum
   `.text(count:preview:) | .color(hex:) | .image(pixelSize:byteCount:) | .files([name],count:) | .link(domain:) | .concealed`.
   Detects concealed via `org.nspasteboard.ConcealedType`; ignores `org.nspasteboard.TransientType`; recognizes hex-color strings.
 - `CopyEvent { content: CopyContent; date: Date }`.
 - No storage, no network anywhere in the package.
 
-### `Blip` (app target — macOS glue, Apple-grade UI)
+### `Blip` (app target - macOS glue, Apple-grade UI)
 - `AppDelegate` composition root: menu bar, watcher, notch controller, settings, login item.
-- `NotchPanel` — borderless non-activating `NSPanel` at status/popUpMenu window level, `canJoinAllSpaces`, `ignoresMouseEvents` (toggled for hover). Computes notch frame (via `NSScreen.safeAreaInsets` / `auxiliaryTopLeftArea`) or top-center fallback.
-- `NotchController` — owns the panel, drives expand/hold/retract animation, hosts SwiftUI `BlipView` for the content. Debounces rapid copies (coalesce).
-- `BlipView` (SwiftUI) — renders the content-adaptive pill per the design language.
-- `MenuBarController` — `NSStatusItem` (SF Symbol), menu: toggle, Settings…, Quit.
-- `SettingsView` (SwiftUI) — the small native settings window.
+- `NotchPanel` - borderless non-activating `NSPanel` at status/popUpMenu window level, `canJoinAllSpaces`, `ignoresMouseEvents` (toggled for hover). Computes notch frame (via `NSScreen.safeAreaInsets` / `auxiliaryTopLeftArea`) or top-center fallback.
+- `NotchController` - owns the panel, drives expand/hold/retract animation, hosts SwiftUI `BlipView` for the content. Debounces rapid copies (coalesce).
+- `BlipView` (SwiftUI) - renders the content-adaptive pill per the design language.
+- `MenuBarController` - `NSStatusItem` (SF Symbol), menu: toggle, Settings…, Quit.
+- `SettingsView` (SwiftUI) - the small native settings window.
 - Thumbnail/icon rendering uses `NSWorkspace`/`NSImage` (no QuickLook needed for v1).
 
 ### Data flow
@@ -116,7 +116,7 @@ Mirror the clean split used before: a pure, testable core package + a thin app t
 
 ## Privacy (load-bearing for trust + the YouTube comments)
 
-- **Local-only. No network. No clipboard history/persistence** — events render and are discarded.
+- **Local-only. No network. No clipboard history/persistence** - events render and are discarded.
 - Honor **`org.nspasteboard.ConcealedType`**: password-manager copies show "Copied · hidden", never the value.
 - Ignore **`org.nspasteboard.TransientType`** (don't blip on app-internal transient copies).
 - Reading `changeCount` needs **no permission/prompt**; reading contents needs none either but is treated with care (processed in-memory only).

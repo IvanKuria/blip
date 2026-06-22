@@ -1,7 +1,7 @@
 import Foundation
 @testable import BlipKit
 
-/// In-memory `PasteboardReading` for tests — set whatever the system pasteboard
+/// In-memory `PasteboardReading` for tests - set whatever the system pasteboard
 /// would expose and assert on classification/watching.
 final class FakePasteboard: PasteboardReading {
     var changeCount: Int

@@ -46,7 +46,7 @@ Target: macOS 14+ / Xcode 26 with the modern `notarytool` workflow.
 script uses the profile name **`blip-notary`**. Create it once using **either**
 option below.
 
-### Option A — Apple ID + app-specific password (simplest)
+### Option A - Apple ID + app-specific password (simplest)
 
 1. Create an app-specific password at <https://account.apple.com> →
    *Sign-In and Security* → *App-Specific Passwords*. (This is **not** your
@@ -62,7 +62,7 @@ option below.
 
    (`--password` is the app-specific password from step 1.)
 
-### Option B — App Store Connect API key (recommended for CI)
+### Option B - App Store Connect API key (recommended for CI)
 
 1. In App Store Connect → *Users and Access* → *Integrations* → *Keys*,
    create a key with the **Developer** role and download the `.p8` file

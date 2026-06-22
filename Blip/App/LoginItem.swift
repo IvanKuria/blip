@@ -14,7 +14,7 @@ enum LoginItem {
                 try SMAppService.mainApp.unregister()
             }
         } catch {
-            NSLog("Blip: login item toggle failed — \(error.localizedDescription)")
+            NSLog("Blip: login item toggle failed - \(error.localizedDescription)")
         }
     }
 }

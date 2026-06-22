@@ -5,7 +5,7 @@ cask "blip" do
 
   url "https://github.com/IvanKuria/blip/releases/download/v#{version}/Blip-#{version}.dmg"
   name "Blip"
-  desc "Confirms every copy in your notch — and shows what you grabbed"
+  desc "Confirms every copy in your notch - and shows what you grabbed"
   homepage "https://github.com/IvanKuria/blip"
 
   app "Blip.app"

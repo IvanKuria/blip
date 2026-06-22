@@ -1,4 +1,4 @@
-/// BlipKit — the pure, testable core of Blip.
+/// BlipKit - the pure, testable core of Blip.
 ///
 /// Pasteboard abstraction, content classification, and change watching.
 /// No UI, no network, no persistence.
