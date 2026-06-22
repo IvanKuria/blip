@@ -1,55 +1,80 @@
+<p align="center">
+  <img src="assets/hero.png" alt="Blip — a copy confirmation in the notch" width="820">
+</p>
+
 <h1 align="center">Blip</h1>
 
-<p align="center"><em>Cmd+C, finally with a moment.</em></p>
+<p align="center"><em>Cmd&#8209;C, finally with a moment.</em></p>
 
 <p align="center">
-  A tiny, native macOS app that confirms every copy in your notch — and tells you
-  <em>what</em> you grabbed. The acknowledgement macOS never gave you.
+  A tiny, native macOS app that confirms every copy right in your notch —
+  and tells you <strong>what</strong> you grabbed.
+</p>
+
+<p align="center">
+  <img alt="Platform" src="https://img.shields.io/badge/macOS-14%2B-black?logo=apple&logoColor=white">
+  <img alt="Swift" src="https://img.shields.io/badge/Swift-6-orange?logo=swift&logoColor=white">
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-blue">
+  <img alt="Native" src="https://img.shields.io/badge/100%25-native%20%C2%B7%20no%20network-success">
 </p>
 
 ---
 
 ## Why
 
-You press Cmd+C and macOS shows you… nothing. So you re-copy "just in case." **Blip** gives that moment a beautiful, content-aware confirmation right in the notch (a soft pill on non-notch Macs):
+You press <kbd>⌘C</kbd> and macOS shows you… nothing. So you copy again "just in case." **Blip** gives that moment a beautiful, content-aware confirmation that grows out of the notch and melts back in — no window, no fuss.
 
-- **Text** → "Copied" + a preview (or character count)
-- **A color** (`#3DD4FF`) → a swatch + the hex
-- **An image** → dimensions + size
-- **File(s)** → name (or "N items")
-- **A link** → "Copied link" + the domain
-- **A password** (from your password manager) → "Copied · hidden" — never the value
+It is **not** a clipboard manager. No history, no list, no database. Just a momentary, delightful *"got it."*
 
-It is **not** a clipboard manager — no history, no list. Just a momentary, delightful "got it," then it retracts.
+## What it looks like
+
+Blip reads what you copied and shows the right thing:
+
+<p align="center">
+  <img src="assets/gallery.png" alt="Text, color, and image confirmations" width="640">
+</p>
+
+- **Text** → a live preview, with word + character count
+- **A color** (`#3DD4FF`) → a swatch + `HEX · rgb(…)`
+- **An image** → a real thumbnail + dimensions and size
+- **Files** → a side-by-side QuickLook tray (see the hero above)
+- **A link** → the domain, with one-click *Open*
+- **A password** (from your password manager) → just `hidden` — never the value
+
+Plus the little things: the app you copied **from**, a **×N** streak when you copy rapidly, and — on **hover** — contextual quick actions (*Open link*, *Reveal in Finder*, *Save image*, *Paste as plain text*, *Copy RGB / HSL*). Click the pill to run the obvious one.
 
 ## Private by design
 
-- **100% local. No network, ever.** (There's intentionally no network entitlement.)
-- **No clipboard history or storage** — each copy is shown and discarded.
-- Honors the `org.nspasteboard.ConcealedType` flag, so password-manager copies show "hidden."
-
-## Settings
-
-Launch at login, on-screen duration, optional sound, text-preview toggle — all in a small native window (⌘,).
+- **100% local. No network, ever** — there's intentionally no network entitlement.
+- **No clipboard history or storage** — each copy is shown, then forgotten.
+- Honors the `org.nspasteboard.ConcealedType` flag, so password-manager copies show `hidden`.
 
 ## Install
 
-**Homebrew** (after first release):
-```bash
-brew install --cask IvanKuria/blip/blip   # tap + cask
-```
+**Build from source** (Xcode 26 / macOS 14+):
 
-**Or build from source:**
 ```bash
 brew install xcodegen
+git clone https://github.com/IvanKuria/blip.git
+cd blip
 xcodegen generate
-open Blip.xcodeproj   # ⌘R
+open Blip.xcodeproj      # then ⌘R
 ```
 
-## How it's built
+**Homebrew cask** and a notarized **DMG** ship with the first tagged release.
 
-- `BlipKit` — a pure, unit-tested Swift package (pasteboard abstraction, content classifier, change watcher). No UI, no network. 15 tests.
-- `Blip` — a thin SwiftUI/AppKit menu-bar app rendering the notch pill (`NSPanel`, system materials, SF Pro, SF Symbols, springs, Reduce-Motion aware).
+## How it works
+
+A clean two-layer split:
+
+- **`BlipKit`** — a pure, unit-tested Swift package: a pasteboard abstraction, a content classifier (text / color / image / files / link / concealed), color formatting, and a change watcher. No UI, no network. **21 tests.**
+- **`Blip`** — a thin SwiftUI + AppKit menu-bar app that renders the notch pill (`NSPanel`, system materials, SF Pro, SF Symbols, springs), enriches each copy with real previews + the source app, and exposes the hover actions.
+
+The notch silhouette (flush top, concave fillets, rounded bottom) is adapted from [NotchDrop](https://github.com/Lakr233/NotchDrop) (MIT).
+
+## Contributing
+
+Issues and PRs welcome. `swift test` (in `Packages/BlipKit`) must stay green; UI changes are verified by running the app.
 
 ## License
 
