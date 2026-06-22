@@ -20,12 +20,6 @@ struct BlipView: View {
                         onHoverChange(hovering)
                     }
                     .onTapGesture { model.actions.first?.perform() }
-                    .opacity(model.isVisible ? 1 : 0)
-                    .scaleEffect(
-                        x: model.isVisible ? 1 : 0.65,
-                        y: model.isVisible ? 1 : 0.4,
-                        anchor: .top
-                    )
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -43,16 +37,28 @@ struct BlipView: View {
         .padding(.top, (model.hasNotch ? model.notchHeight : 6) + 12)
         .padding(.bottom, 18)
         .frame(minWidth: max(model.minWidth, 300))
-        // No shadow on the notch extension (a halo makes it read gray and floaty);
-        // a soft shadow only for the detached soft-pill on non-notch displays.
+        // Content fades + lifts (applied before the background so only the
+        // content fades, not the black).
+        .opacity(model.isVisible ? 1 : 0)
+        .scaleEffect(model.isVisible ? 1 : 0.97, anchor: .top)
+        .offset(y: model.isVisible ? 0 : -6)
+        // The black notch shape widens out of the notch, bled 2px above the top
+        // edge so there's never a seam line against the menu bar.
         .background {
-            if model.hasNotch {
-                background
-            } else {
-                background.shadow(color: .black.opacity(0.3), radius: 9, y: 5)
-            }
+            backgroundLayer
+                .scaleEffect(x: model.isVisible ? 1 : 0.5, y: model.isVisible ? 1 : 0.45, anchor: .top)
+                .padding(.top, model.hasNotch ? -2 : 0)
         }
         .padding(.top, model.hasNotch ? 0 : 8)
+    }
+
+    @ViewBuilder
+    private var backgroundLayer: some View {
+        if model.hasNotch {
+            background
+        } else {
+            background.shadow(color: .black.opacity(0.3), radius: 9, y: 5)
+        }
     }
 
     // MARK: Content body (single row, or side-by-side file tray)
