@@ -30,7 +30,7 @@ final class NotchController {
     func show(_ event: CopyEvent) {
         let defaults = UserDefaults.standard
         model.showPreview = defaults.object(forKey: "showPreview") as? Bool ?? true
-        let duration = defaults.object(forKey: "duration") as? Double ?? 1.2
+        let duration = defaults.object(forKey: "duration") as? Double ?? 2.6
 
         let screen = NotchGeometry.notchScreen()
         model.notchHeight = screen.safeAreaInsets.top

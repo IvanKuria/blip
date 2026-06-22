@@ -3,11 +3,10 @@ import SwiftUI
 /// Design tokens. Apple-grade: system materials, SF Pro, semantic colors,
 /// a single system-style spring.
 enum Theme {
-    static let pillCornerRadius: CGFloat = 22
-    static let pillHeight: CGFloat = 56
-    static let panelSize = CGSize(width: 420, height: 140)
+    static let pillCornerRadius: CGFloat = 26
+    static let panelSize = CGSize(width: 620, height: 260)
 
-    static let spring = Animation.spring(response: 0.34, dampingFraction: 0.82)
+    static let spring = Animation.spring(response: 0.42, dampingFraction: 0.8)
 
     static let check = Color(nsColor: .systemGreen)
     static let title = Color(nsColor: .labelColor)

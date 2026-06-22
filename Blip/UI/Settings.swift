@@ -3,7 +3,7 @@ import SwiftUI
 /// A small, native settings window (Cmd-,). Apple-minimal.
 struct SettingsView: View {
     @AppStorage("enabled") private var enabled = true
-    @AppStorage("duration") private var duration = 1.2
+    @AppStorage("duration") private var duration = 2.6
     @AppStorage("soundEnabled") private var soundEnabled = false
     @AppStorage("showPreview") private var showPreview = true
     @State private var launchAtLogin = LoginItem.isEnabled
@@ -20,7 +20,7 @@ struct SettingsView: View {
                 Toggle("Show a preview of copied text", isOn: $showPreview)
                 Toggle("Play a sound", isOn: $soundEnabled)
                 LabeledContent("On screen for") {
-                    Slider(value: $duration, in: 0.6...3.0, step: 0.2) { Text("Duration") }
+                    Slider(value: $duration, in: 1.0...6.0, step: 0.2) { Text("Duration") }
                         .frame(width: 180)
                     Text("\(duration, specifier: "%.1f")s").monospacedDigit().foregroundStyle(.secondary)
                 }

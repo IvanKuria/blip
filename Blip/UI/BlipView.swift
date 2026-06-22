@@ -36,16 +36,16 @@ struct BlipView: View {
 
     private func pill(for content: CopyContent) -> some View {
         VStack(spacing: 0) {
-            HStack(spacing: 12) {
+            HStack(spacing: 15) {
                 Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(.system(size: 27, weight: .semibold))
                     .foregroundStyle(.white, Theme.check)
 
                 chip(for: content)
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(title(for: content))
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(.white)
                     subtitle(for: content)
                 }
@@ -57,10 +57,10 @@ struct BlipView: View {
                 actionRow
             }
         }
-        .padding(.horizontal, 18)
-        .padding(.top, (model.hasNotch ? model.notchHeight : 4) + 6)
-        .padding(.bottom, 13)
-        .frame(minWidth: model.minWidth)
+        .padding(.horizontal, 24)
+        .padding(.top, (model.hasNotch ? model.notchHeight : 6) + 12)
+        .padding(.bottom, 18)
+        .frame(minWidth: max(model.minWidth, 300))
         .background { background.shadow(color: .black.opacity(0.3), radius: 9, y: 5) }
         .padding(.top, model.hasNotch ? 0 : 8)
     }
@@ -76,8 +76,8 @@ struct BlipView: View {
                     onHoverChange(false)
                 } label: {
                     Label(action.title, systemImage: action.systemImage)
-                        .font(.system(size: 11, weight: .medium))
-                        .padding(.horizontal, 9).padding(.vertical, 5)
+                        .font(.system(size: 13, weight: .medium))
+                        .padding(.horizontal, 12).padding(.vertical, 7)
                         .background(Capsule().fill(.white.opacity(0.12)))
                         .foregroundStyle(.white)
                 }
@@ -89,9 +89,9 @@ struct BlipView: View {
 
     private var comboBadge: some View {
         Text("×\(model.comboCount)")
-            .font(.system(size: 12, weight: .bold).monospacedDigit())
+            .font(.system(size: 15, weight: .bold).monospacedDigit())
             .foregroundStyle(.white)
-            .padding(.horizontal, 7).padding(.vertical, 3)
+            .padding(.horizontal, 9).padding(.vertical, 4)
             .background(Capsule().fill(Theme.check))
     }
 
@@ -115,10 +115,10 @@ struct BlipView: View {
         } else if let thumb = model.thumbnails.first {
             thumbnailView(thumb)
         } else if case let .color(hex) = content {
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(hexString: hex))
-                .frame(width: 30, height: 30)
-                .overlay(RoundedRectangle(cornerRadius: 7).strokeBorder(.white.opacity(0.2)))
+                .frame(width: 44, height: 44)
+                .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.white.opacity(0.2)))
         } else {
             chipGlyph(glyphName(for: content))
         }
@@ -127,9 +127,9 @@ struct BlipView: View {
     private func thumbnailView(_ image: NSImage) -> some View {
         Image(nsImage: image)
             .resizable().interpolation(.high).aspectRatio(contentMode: .fill)
-            .frame(width: 30, height: 30)
-            .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 7).strokeBorder(.white.opacity(0.15)))
+            .frame(width: 44, height: 44)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.white.opacity(0.15)))
     }
 
     private var stackedThumbnails: some View {
@@ -137,22 +137,22 @@ struct BlipView: View {
             ForEach(Array(model.thumbnails.prefix(3).enumerated().reversed()), id: \.offset) { index, image in
                 Image(nsImage: image)
                     .resizable().interpolation(.high).aspectRatio(contentMode: .fill)
-                    .frame(width: 26, height: 26)
-                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.white.opacity(0.2)))
+                    .frame(width: 38, height: 38)
+                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.white.opacity(0.2)))
                     .rotationEffect(.degrees(Double(index) * 6 - 6))
-                    .offset(x: CGFloat(index) * 3, y: CGFloat(index) * -1)
+                    .offset(x: CGFloat(index) * 4, y: CGFloat(index) * -1.5)
             }
         }
-        .frame(width: 34, height: 32)
+        .frame(width: 50, height: 44)
     }
 
     private func chipGlyph(_ name: String) -> some View {
         Image(systemName: name)
-            .font(.system(size: 14, weight: .medium))
+            .font(.system(size: 19, weight: .medium))
             .foregroundStyle(.white.opacity(0.7))
-            .frame(width: 28, height: 28)
-            .background(RoundedRectangle(cornerRadius: 7, style: .continuous).fill(.white.opacity(0.10)))
+            .frame(width: 40, height: 40)
+            .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(.white.opacity(0.10)))
     }
 
     private func glyphName(for content: CopyContent) -> String {
@@ -174,13 +174,13 @@ struct BlipView: View {
 
     @ViewBuilder
     private func subtitle(for content: CopyContent) -> some View {
-        HStack(spacing: 5) {
+        HStack(spacing: 6) {
             if let icon = model.sourceAppIcon, !isColor(content) {
-                Image(nsImage: icon).resizable().frame(width: 13, height: 13)
+                Image(nsImage: icon).resizable().frame(width: 16, height: 16)
             }
             Text(detailText(for: content))
-                .font(.system(size: 11).monospacedDigit())
-                .foregroundStyle(.white.opacity(0.6))
+                .font(.system(size: 13).monospacedDigit())
+                .foregroundStyle(.white.opacity(0.62))
                 .lineLimit(1)
         }
     }
