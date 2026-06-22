@@ -36,26 +36,8 @@ struct BlipView: View {
 
     private func pill(for content: CopyContent) -> some View {
         VStack(spacing: 0) {
-            HStack(spacing: 15) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 27, weight: .semibold))
-                    .foregroundStyle(.white, Theme.check)
-
-                chip(for: content)
-
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(title(for: content))
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.white)
-                    subtitle(for: content)
-                }
-
-                if model.comboCount > 1 { comboBadge }
-            }
-
-            if model.isHovered, !model.actions.isEmpty {
-                actionRow
-            }
+            contentBody(for: content)
+            if model.isHovered, !model.actions.isEmpty { actionRow }
         }
         .padding(.horizontal, 24)
         .padding(.top, (model.hasNotch ? model.notchHeight : 6) + 12)
@@ -71,6 +53,91 @@ struct BlipView: View {
             }
         }
         .padding(.top, model.hasNotch ? 0 : 8)
+    }
+
+    // MARK: Content body (single row, or side-by-side file tray)
+
+    @ViewBuilder
+    private func contentBody(for content: CopyContent) -> some View {
+        if case .files = content, !model.fileItems.isEmpty {
+            filesBody(content)
+        } else {
+            singleRow(content)
+        }
+    }
+
+    private func singleRow(_ content: CopyContent) -> some View {
+        HStack(spacing: 15) {
+            checkmark
+            chip(for: content)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title(for: content))
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(.white)
+                subtitle(for: content)
+            }
+            if model.comboCount > 1 { comboBadge }
+        }
+    }
+
+    private func filesBody(_ content: CopyContent) -> some View {
+        let total: Int = { if case let .files(_, count) = content { return count } else { return model.fileItems.count } }()
+        let extra = max(0, total - model.fileItems.count)
+        return VStack(alignment: .leading, spacing: 13) {
+            HStack(spacing: 15) {
+                checkmark
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Copied").font(.system(size: 17, weight: .semibold)).foregroundStyle(.white)
+                    HStack(spacing: 6) {
+                        if let icon = model.sourceAppIcon {
+                            Image(nsImage: icon).resizable().frame(width: 16, height: 16)
+                        }
+                        Text("\(total) item\(total == 1 ? "" : "s")")
+                            .font(.system(size: 13).monospacedDigit())
+                            .foregroundStyle(.white.opacity(0.62))
+                    }
+                }
+                if model.comboCount > 1 { comboBadge }
+            }
+            HStack(spacing: 10) {
+                ForEach(model.fileItems) { fileTile($0) }
+                if extra > 0 { moreTile(extra) }
+            }
+            .padding(10)
+            .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(.white.opacity(0.06)))
+        }
+    }
+
+    private func fileTile(_ item: FileItem) -> some View {
+        VStack(spacing: 6) {
+            Image(nsImage: item.image)
+                .resizable().interpolation(.high).aspectRatio(contentMode: .fit)
+                .frame(width: 46, height: 46)
+            Text(item.name)
+                .font(.system(size: 11))
+                .foregroundStyle(.white.opacity(0.8))
+                .lineLimit(1).truncationMode(.middle)
+                .frame(width: 78)
+        }
+        .frame(width: 86)
+    }
+
+    private func moreTile(_ count: Int) -> some View {
+        VStack(spacing: 6) {
+            Text("+\(count)")
+                .font(.system(size: 18, weight: .semibold).monospacedDigit())
+                .foregroundStyle(.white.opacity(0.8))
+                .frame(width: 46, height: 46)
+                .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(.white.opacity(0.08)))
+            Text("more").font(.system(size: 11)).foregroundStyle(.white.opacity(0.6))
+        }
+        .frame(width: 64)
+    }
+
+    private var checkmark: some View {
+        Image(systemName: "checkmark.circle.fill")
+            .font(.system(size: 27, weight: .semibold))
+            .foregroundStyle(.white, Theme.check)
     }
 
     // MARK: Hover actions
@@ -108,9 +175,9 @@ struct BlipView: View {
     @ViewBuilder
     private var background: some View {
         if model.hasNotch {
-            NotchBackground(radius: 14)
+            NotchBackground(radius: 22)
         } else {
-            RoundedRectangle(cornerRadius: 20, style: .continuous).fill(.black)
+            RoundedRectangle(cornerRadius: 24, style: .continuous).fill(.black)
         }
     }
 

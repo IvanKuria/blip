@@ -87,6 +87,7 @@ final class NotchController {
             self.panel.orderOut(nil)
             self.model.content = nil
             self.model.thumbnails = []
+            self.model.fileItems = []
             self.model.sourceApp = nil
             self.model.sourceAppIcon = nil
             self.model.actions = []
@@ -98,28 +99,31 @@ final class NotchController {
 
     private func enrichThumbnails(for content: CopyContent) {
         model.thumbnails = []
+        model.fileItems = []
         switch content {
         case .image:
             if let image = NSImage(pasteboard: .general) { model.thumbnails = [image] }
         case .files:
-            let urls = fileURLs()
-            model.thumbnails = urls.prefix(3).map { NSWorkspace.shared.icon(forFile: $0.path) }
-            if let first = urls.first { upgradeWithQuickLook(first, for: content) }
+            let urls = Array(fileURLs().prefix(5))
+            model.fileItems = urls.map {
+                FileItem(name: $0.lastPathComponent, image: NSWorkspace.shared.icon(forFile: $0.path))
+            }
+            for (index, url) in urls.enumerated() { upgradeFileThumbnail(at: index, url: url, for: content) }
         default:
             break
         }
     }
 
-    private func upgradeWithQuickLook(_ url: URL, for content: CopyContent) {
+    private func upgradeFileThumbnail(at index: Int, url: URL, for content: CopyContent) {
         let request = QLThumbnailGenerator.Request(
-            fileAt: url, size: CGSize(width: 64, height: 64), scale: 2, representationTypes: .thumbnail
+            fileAt: url, size: CGSize(width: 96, height: 96), scale: 2, representationTypes: .thumbnail
         )
         QLThumbnailGenerator.shared.generateBestRepresentation(for: request) { [weak self] rep, _ in
             guard let rep else { return }
             let image = rep.nsImage
             DispatchQueue.main.async {
-                guard let self, self.model.content == content, !self.model.thumbnails.isEmpty else { return }
-                self.model.thumbnails[0] = image
+                guard let self, self.model.content == content, index < self.model.fileItems.count else { return }
+                self.model.fileItems[index].image = image
             }
         }
     }
