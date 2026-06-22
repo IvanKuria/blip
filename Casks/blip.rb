@@ -1,14 +1,11 @@
 cask "blip" do
   version "0.1.0"
 
-  # TODO: Pin the real checksum before publishing. Get it from the build script
-  # output (`shasum -a 256 build/Blip-<version>.dmg`) and replace :no_check:
-  #   sha256 "<paste-the-64-char-hex-digest-here>"
-  sha256 :no_check
+  sha256 "6c7b754c4f942d9e2fbf06234f3732ce987de9968bd22fb6f0ffd1c3fb35a12b"
 
   url "https://github.com/IvanKuria/blip/releases/download/v#{version}/Blip-#{version}.dmg"
   name "Blip"
-  desc "macOS app by Ivan Kuria"
+  desc "Confirms every copy in your notch — and shows what you grabbed"
   homepage "https://github.com/IvanKuria/blip"
 
   app "Blip.app"
