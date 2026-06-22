@@ -15,8 +15,15 @@ final class PillModel {
     /// Height of the physical notch (0 on displays without one).
     var notchHeight: CGFloat = 0
     var hasNotch: Bool { notchHeight > 0 }
-    /// A real preview (copied image, or a file's QuickLook/icon), when available.
-    var thumbnail: NSImage?
-    /// The app the copy came from (e.g. "Safari").
+    /// Real previews (the copied image, or up to a few files' QuickLook/icons).
+    var thumbnails: [NSImage] = []
+    /// The app the copy came from (e.g. "Safari") + its icon.
     var sourceApp: String?
+    var sourceAppIcon: NSImage?
+    /// How many rapid copies in a row (shown as "×N" when > 1).
+    var comboCount: Int = 1
+    /// True while the cursor is over the pill (keeps it open, reveals actions).
+    var isHovered = false
+    /// Contextual quick actions for the current content.
+    var actions: [CopyAction] = []
 }

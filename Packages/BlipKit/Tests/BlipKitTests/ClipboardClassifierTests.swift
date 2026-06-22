@@ -57,7 +57,12 @@ final class ClipboardClassifierTests: XCTestCase {
 
     func testPlainText() {
         let pb = FakePasteboard(types: [PBType.string], strings: [PBType.string: "  hello world  "])
-        XCTAssertEqual(ClipboardClassifier.classify(pb), .text(characters: 11, preview: "hello world"))
+        XCTAssertEqual(ClipboardClassifier.classify(pb), .text(characters: 11, words: 2, preview: "hello world"))
+    }
+
+    func testWordCount() {
+        let pb = FakePasteboard(types: [PBType.string], strings: [PBType.string: "  the quick brown fox  "])
+        XCTAssertEqual(ClipboardClassifier.classify(pb), .text(characters: 19, words: 4, preview: "the quick brown fox"))
     }
 
     func testEmptyIsNil() {

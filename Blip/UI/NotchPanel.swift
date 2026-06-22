@@ -16,7 +16,9 @@ final class NotchPanel: NSPanel {
         isOpaque = false
         backgroundColor = .clear
         hasShadow = false
-        ignoresMouseEvents = true
+        // Interactive: the pill detects hover + clicks; transparent areas fall
+        // through because SwiftUI hit-testing returns nil where there's no view.
+        ignoresMouseEvents = false
         hidesOnDeactivate = false
         isReleasedWhenClosed = false
         self.contentView = contentView

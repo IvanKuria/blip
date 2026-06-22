@@ -16,7 +16,7 @@ final class ClipboardWatcherTests: XCTestCase {
         watcher.poll()
 
         XCTAssertEqual(events.count, 1)
-        XCTAssertEqual(events.first?.content, .text(characters: 5, preview: "hello"))
+        XCTAssertEqual(events.first?.content, .text(characters: 5, words: 1, preview: "hello"))
         XCTAssertEqual(events.first?.date, fixedDate)
     }
 

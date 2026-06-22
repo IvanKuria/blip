@@ -12,7 +12,7 @@ final class ModelTests: XCTestCase {
     func testCopyContentEquatable() {
         XCTAssertEqual(CopyContent.concealed, CopyContent.concealed)
         XCTAssertEqual(CopyContent.color(hex: "#FFFFFF"), CopyContent.color(hex: "#FFFFFF"))
-        XCTAssertNotEqual(CopyContent.text(characters: 1, preview: "a"),
-                          CopyContent.text(characters: 2, preview: "a"))
+        XCTAssertNotEqual(CopyContent.text(characters: 1, words: 1, preview: "a"),
+                          CopyContent.text(characters: 2, words: 1, preview: "a"))
     }
 }

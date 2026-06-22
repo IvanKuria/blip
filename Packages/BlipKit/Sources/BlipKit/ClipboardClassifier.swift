@@ -34,9 +34,10 @@ public enum ClipboardClassifier {
             if let hex = normalizedHex(trimmed) { return .color(hex: hex) }
             if let domain = linkDomain(trimmed) { return .link(domain: domain) }
 
+            let words = trimmed.split(whereSeparator: { $0.isWhitespace }).count
             let preview = String(trimmed.prefix(40))
                 .replacingOccurrences(of: "\n", with: " ")
-            return .text(characters: trimmed.count, preview: preview)
+            return .text(characters: trimmed.count, words: words, preview: preview)
         }
 
         return nil
